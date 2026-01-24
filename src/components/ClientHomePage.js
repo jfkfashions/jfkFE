@@ -26,12 +26,12 @@ const ClientHomePage = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `${backendUrl}/api/users/profile/${username}`
+          `${backendUrl}/api/users/profile/${username}`,
         );
         setProfile(response.data);
       } catch (err) {
         setError(
-          "Unable to fetch profile information. Please try again later."
+          "Unable to fetch profile information. Please try again later.",
         );
         console.error("Profile fetch error:", err);
       } finally {
@@ -61,7 +61,7 @@ const ClientHomePage = () => {
         `${backendUrl}/api/users/measurements/view/`,
         {
           params: { username },
-        }
+        },
       );
       if (response.data) {
         navigate(`/measurements/view/${username}`);
@@ -210,7 +210,8 @@ const ClientHomePage = () => {
                 <p className="action-desc">Update your personal information</p>
               </button>
 
-              <button
+              {/* Biodata - Commented out for now, may be useful in future */}
+              {/* <button
                 className="action-card"
                 onClick={() => navigate("/biodata")}
                 style={{
@@ -222,7 +223,7 @@ const ClientHomePage = () => {
                 <div className="action-icon">📋</div>
                 <h3 className="action-title">Biodata</h3>
                 <p className="action-desc">View or submit your biodata</p>
-              </button>
+              </button> */}
 
               <button
                 className="action-card"

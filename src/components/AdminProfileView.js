@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../globalContext/constant";
 import { useNavigate, useParams } from "react-router-dom";
-import background from "../images/editprofile.webp"; // Adjust path accordingly
+import background from "../images/editprofile.webp";
+import {
+  COLORS,
+  SELECTED_FONT,
+  TYPOGRAPHY,
+  SPACING,
+  BORDER_RADIUS,
+  SHADOWS,
+} from "../utils/constants";
 
 const ViewProfilePage = () => {
   const [profile, setProfile] = useState({
@@ -24,7 +32,7 @@ const ViewProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}/api/users/profile/${ProfileId}`
+          `${backendUrl}/api/users/profile/${ProfileId}`,
         );
         setProfile(response.data);
       } catch (err) {
@@ -42,7 +50,7 @@ const ViewProfilePage = () => {
         `${backendUrl}/api/users/measurements/view/`,
         {
           params: { username },
-        }
+        },
       );
       if (response.data) {
         navigate(`/measurements/view/${username}`); // Navigate to measurements page if data exists
@@ -150,77 +158,82 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "40px",
+    padding: SPACING.XL,
+    fontFamily: SELECTED_FONT,
   },
   container: {
-    maxWidth: "800px",
+    maxWidth: "900px",
     width: "100%",
     margin: "50px auto",
-    padding: "50px",
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
-    borderRadius: "15px",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-    fontFamily: "Arial, sans-serif",
+    padding: SPACING.XXL,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: BORDER_RADIUS.LG,
+    boxShadow: SHADOWS.LARGE,
   },
   heading: {
-    fontSize: "2.5rem",
-    marginBottom: "30px",
+    fontSize: TYPOGRAPHY.HEADING_1,
+    fontWeight: TYPOGRAPHY.WEIGHT_BOLD,
+    marginBottom: SPACING.XL,
     textAlign: "center",
-    color: "#333",
+    color: COLORS.PRIMARY_BROWN_1,
+    fontFamily: SELECTED_FONT,
   },
   profileInfo: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: SPACING.LG,
+    marginBottom: SPACING.XL,
   },
   field: {
     display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 0",
-    borderBottom: "1px solid #ccc",
+    flexDirection: "column",
+    padding: SPACING.MD,
+    backgroundColor: "rgba(139, 69, 19, 0.03)",
+    borderRadius: BORDER_RADIUS.MD,
+    border: `1px solid ${COLORS.BORDER}`,
   },
   label: {
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-    color: "#555",
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    fontSize: TYPOGRAPHY.BODY,
+    color: COLORS.PRIMARY_BROWN_1,
+    marginBottom: SPACING.XS,
+    fontFamily: SELECTED_FONT,
   },
   value: {
-    fontSize: "1.2rem",
-    color: "#333",
-  },
-  homeButton: {
-    padding: "15px 20px",
-    fontSize: "1.2rem",
-    color: "#fff",
-    backgroundColor: "#28a745",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    marginTop: "20px",
-    alignItems: "center",
-    justifyContent: "center",
+    fontSize: TYPOGRAPHY.BODY,
+    color: COLORS.TEXT_DARK,
+    fontFamily: SELECTED_FONT,
   },
   error: {
-    color: "red",
-    fontSize: "1.2rem",
-    marginBottom: "20px",
+    color: COLORS.SECONDARY_RED,
+    fontSize: TYPOGRAPHY.BODY,
+    marginBottom: SPACING.LG,
     textAlign: "center",
+    padding: SPACING.MD,
+    backgroundColor: "rgba(220, 53, 69, 0.1)",
+    borderRadius: BORDER_RADIUS.MD,
+    fontFamily: SELECTED_FONT,
   },
   actionButtonContainer: {
-    display: "inline-block", // Ensures inline display of buttons
+    display: "flex",
+    gap: SPACING.MD,
+    justifyContent: "center",
+    flexWrap: "wrap",
+    marginTop: SPACING.XL,
   },
   actionbutton: {
-    padding: "15px 20px",
-    margin: "0 5px", // Adjust the spacing between buttons
-    backgroundColor: "#007bff",
-    color: "#fff",
+    padding: `${SPACING.MD} ${SPACING.LG}`,
+    backgroundColor: COLORS.PRIMARY_BROWN_1,
+    color: COLORS.TEXT_WHITE,
     border: "none",
-    borderRadius: "5px",
+    borderRadius: BORDER_RADIUS.MD,
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    minWidth: "75px", // Ensure all buttons have the same width
-    textAlign: "center",
-    alignItems: "center",
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    fontFamily: SELECTED_FONT,
+    transition: "all 0.3s ease",
+    minWidth: "180px",
+    boxShadow: SHADOWS.MEDIUM,
   },
   modalOverlay: {
     position: "fixed",
@@ -228,39 +241,46 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1000, // Ensure the modal is above all content
+    zIndex: 1000,
   },
   modalContent: {
-    backgroundColor: "#fff",
-    padding: "30px",
-    borderRadius: "10px",
+    backgroundColor: COLORS.TEXT_WHITE,
+    padding: SPACING.XXL,
+    borderRadius: BORDER_RADIUS.LG,
     textAlign: "center",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    width: "80%", // Ensure it's not too wide on smaller screens
-    maxWidth: "400px",
+    boxShadow: SHADOWS.LARGE,
+    maxWidth: "450px",
+    width: "90%",
   },
   modalHeading: {
-    fontSize: "1.5rem",
-    color: "#333",
-    marginBottom: "10px",
+    fontSize: TYPOGRAPHY.HEADING_2,
+    fontWeight: TYPOGRAPHY.WEIGHT_BOLD,
+    color: COLORS.PRIMARY_BROWN_1,
+    marginBottom: SPACING.MD,
+    fontFamily: SELECTED_FONT,
   },
   modalText: {
-    fontSize: "1rem",
-    color: "#333",
-    marginBottom: "20px",
+    fontSize: TYPOGRAPHY.BODY,
+    color: COLORS.TEXT_DARK,
+    marginBottom: SPACING.MD,
+    fontFamily: SELECTED_FONT,
   },
   closeButton: {
-    padding: "10px 20px",
-    fontSize: "1rem",
-    color: "#fff",
-    backgroundColor: "#007bff",
+    padding: `${SPACING.SM} ${SPACING.XL}`,
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    color: COLORS.TEXT_WHITE,
+    backgroundColor: COLORS.PRIMARY_BROWN_1,
     border: "none",
-    borderRadius: "5px",
+    borderRadius: BORDER_RADIUS.MD,
     cursor: "pointer",
+    fontFamily: SELECTED_FONT,
+    marginTop: SPACING.MD,
+    boxShadow: SHADOWS.MEDIUM,
   },
 };
 

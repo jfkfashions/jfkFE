@@ -27,7 +27,7 @@ const MeasurementViewPage = () => {
         `${backendUrl}/api/users/measurements/view/`,
         {
           params: { username },
-        }
+        },
       );
       // Handle both single measurement and array response
       if (Array.isArray(response.data)) {
@@ -69,38 +69,42 @@ const MeasurementViewPage = () => {
     }, 100);
   };
 
-  // Measurement categories for better organization (all in cm)
+  // Measurement categories for better organization (all in inches)
   const measurementCategories = [
     {
       title: "Upper Body Measurements",
       icon: "👕",
       measurements: [
-        { label: "Neck", value: measurements?.neck, unit: "cm" },
-        { label: "Chest", value: measurements?.chest, unit: "cm" },
-        { label: "Shoulder", value: measurements?.shoulder, unit: "cm" },
-        { label: "Armhole", value: measurements?.armhole, unit: "cm" },
-        { label: "Bicep", value: measurements?.bicep, unit: "cm" },
-        { label: "Sleeve", value: measurements?.sleeve, unit: "cm" },
-        { label: "Wrist", value: measurements?.wrist, unit: "cm" },
+        { label: "Neck", value: measurements?.neck, unit: "inches" },
+        { label: "Chest", value: measurements?.chest, unit: "inches" },
+        { label: "Shoulder", value: measurements?.shoulder, unit: "inches" },
+        { label: "Armhole", value: measurements?.armhole, unit: "inches" },
+        { label: "Bicep", value: measurements?.bicep, unit: "inches" },
+        { label: "Sleeve", value: measurements?.sleeve, unit: "inches" },
+        { label: "Wrist", value: measurements?.wrist, unit: "inches" },
       ],
     },
     {
       title: "Lower Body Measurements",
       icon: "👖",
       measurements: [
-        { label: "Waist", value: measurements?.waist, unit: "cm" },
-        { label: "Hip", value: measurements?.hip, unit: "cm" },
-        { label: "Thigh", value: measurements?.thigh, unit: "cm" },
-        { label: "Inseam", value: measurements?.inseam, unit: "cm" },
-        { label: "Outseam", value: measurements?.outseam, unit: "cm" },
-        { label: "Rise", value: measurements?.rise, unit: "cm" },
+        { label: "Waist", value: measurements?.waist, unit: "inches" },
+        { label: "Hip", value: measurements?.hip, unit: "inches" },
+        { label: "Thigh", value: measurements?.thigh, unit: "inches" },
+        { label: "Inseam", value: measurements?.inseam, unit: "inches" },
+        { label: "Outseam", value: measurements?.outseam, unit: "inches" },
+        { label: "Rise", value: measurements?.rise, unit: "inches" },
       ],
     },
     {
       title: "Full Body",
       icon: "👤",
       measurements: [
-        { label: "Body Length", value: measurements?.bodylength, unit: "cm" },
+        {
+          label: "Body Length",
+          value: measurements?.bodylength,
+          unit: "inches",
+        },
       ],
     },
   ];
@@ -336,7 +340,7 @@ const MeasurementViewPage = () => {
             Professional tailoring measurements for perfect fit
           </p>
           <div style={styles.usernameBadge}>Client: {username}</div>
-          <p style={styles.unitNotice}>All measurements in centimeters (cm)</p>
+          <p style={styles.unitNotice}>All measurements in inches (in)</p>
         </div>
 
         {loading ? (
@@ -511,6 +515,7 @@ const MeasurementViewPage = () => {
                 >
                   🔄 Refresh
                 </button>
+                {/* View History button - commented out for future implementation
                 <button
                   style={styles.dangerButton}
                   onMouseEnter={(e) =>
@@ -528,6 +533,7 @@ const MeasurementViewPage = () => {
                 >
                   📜 View History
                 </button>
+                */}
               </div>
             </div>
           </>

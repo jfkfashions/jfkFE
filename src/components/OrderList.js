@@ -26,6 +26,9 @@ const OrderList = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
+  // Admin-specific measurement view state
+  const [adminMeasurements, setAdminMeasurements] = useState(null);
+  const [adminMeasLoading, setAdminMeasLoading] = useState(false);
   const ordersPerPage = 8;
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
@@ -74,7 +77,9 @@ const OrderList = () => {
           order.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
           order.id.toString().includes(searchTerm) ||
           order.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          order.preferred_Color.toLowerCase().includes(searchTerm.toLowerCase())
+          order.preferred_Color
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -170,7 +175,7 @@ const OrderList = () => {
                             <div class="detail-item">
                                 <span class="detail-label">Expected Delivery:</span>
                                 <span class="detail-value">${new Date(
-                                  order.expected_date
+                                  order.expected_date,
                                 ).toLocaleDateString("en-US", {
                                   weekday: "long",
                                   year: "numeric",
@@ -242,15 +247,15 @@ const OrderList = () => {
         `${backendUrl}/api/users/orders/confirm/${selectedOrder.id}/`,
         {
           client: selectedOrder.client,
-        }
+        },
       );
 
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === selectedOrder.id
             ? { ...order, is_confirmed: true }
-            : order
-        )
+            : order,
+        ),
       );
 
       composeMailData(selectedOrder, "confirmed");
@@ -269,10 +274,10 @@ const OrderList = () => {
     try {
       setActionLoading(true);
       await axios.post(
-        `${backendUrl}/api/users/orders/delete/${selectedOrder.id}/`
+        `${backendUrl}/api/users/orders/delete/${selectedOrder.id}/`,
       );
       setOrders((prevOrders) =>
-        prevOrders.filter((order) => order.id !== selectedOrder.id)
+        prevOrders.filter((order) => order.id !== selectedOrder.id),
       );
 
       composeMailData(selectedOrder, "deleted");
@@ -291,6 +296,21 @@ const OrderList = () => {
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
     setShowDetailsModal(true);
+    // If admin, fetch up-to-date measurements for the client
+    if (role === "admin" && order?.client) {
+      setAdminMeasLoading(true);
+      axios
+        .get(`${backendUrl}/api/users/measurements/view/`, {
+          params: { username: order.client },
+        })
+        .then((response) => {
+          setAdminMeasurements(response.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching admin measurements:", err);
+        })
+        .finally(() => setAdminMeasLoading(false));
+    }
   };
 
   const handleOpenConfirmModal = (order) => {
@@ -312,10 +332,46 @@ const OrderList = () => {
   };
 
   const getStatusBadge = (order) => {
-    if (order.is_confirmed) {
-      return <span className="status-badge confirmed">✓ Confirmed</span>;
-    } else {
-      return <span className="status-badge pending">⏳ Pending</span>;
+    // Show actual order status for both admin and client
+    switch (order.status) {
+      case "Completed":
+        return <span className="status-badge completed">✓ Completed</span>;
+      case "fitting":
+        return (
+          <span className="status-badge fitting">👔 Ready for Fitting</span>
+        );
+      case "in_progress":
+        return <span className="status-badge in-progress">⚙️ In Progress</span>;
+      case "Pending":
+        if (order.is_confirmed) {
+          return <span className="status-badge confirmed">✓ Confirmed</span>;
+        } else {
+          return <span className="status-badge pending">⏳ Pending</span>;
+        }
+      default:
+        return <span className="status-badge pending">⏳ Pending</span>;
+    }
+  };
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      setActionLoading(true);
+      await axios.put(
+        `${backendUrl}/api/users/orders/updatestatus/${orderId}/`,
+        {
+          status: newStatus,
+        },
+      );
+
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -492,14 +548,74 @@ const OrderList = () => {
                     👁️ View Details
                   </button>
 
-                  {!order.is_confirmed && (
+                  {/* Admin buttons based on order status */}
+                  {role === "admin" && (
+                    <>
+                      {/* New/Pending orders: Show Confirm button */}
+                      {!order.is_confirmed && order.status === "Pending" && (
+                        <button
+                          onClick={() => handleOpenConfirmModal(order)}
+                          className="card-button confirm-button"
+                        >
+                          ✓ Confirm
+                        </button>
+                      )}
+
+                      {/* In Progress: Show Ready for Fitting + Mark Completed */}
+                      {order.status === "in_progress" && (
+                        <>
+                          <button
+                            onClick={() =>
+                              updateOrderStatus(order.id, "fitting")
+                            }
+                            className="card-button fitting-button"
+                            disabled={actionLoading}
+                          >
+                            👔 Ready for Fitting
+                          </button>
+                          <button
+                            onClick={() =>
+                              updateOrderStatus(order.id, "Completed")
+                            }
+                            className="card-button completed-button"
+                            disabled={actionLoading}
+                          >
+                            ✓ Mark Completed
+                          </button>
+                        </>
+                      )}
+
+                      {/* Ready for Fitting: Show Mark Completed */}
+                      {order.status === "fitting" && (
+                        <button
+                          onClick={() =>
+                            updateOrderStatus(order.id, "Completed")
+                          }
+                          className="card-button completed-button"
+                          disabled={actionLoading}
+                        >
+                          ✓ Mark Completed
+                        </button>
+                      )}
+
+                      {/* Confirmed but still Pending: Show Mark In Progress */}
+                      {order.is_confirmed && order.status === "Pending" && (
+                        <button
+                          onClick={() =>
+                            updateOrderStatus(order.id, "in_progress")
+                          }
+                          className="card-button progress-button"
+                          disabled={actionLoading}
+                        >
+                          ⚙️ Mark In Progress
+                        </button>
+                      )}
+                    </>
+                  )}
+
+                  {/* Client buttons: Only edit/delete for unconfirmed orders */}
+                  {role === "client" && !order.is_confirmed && (
                     <div className="action-buttons">
-                      <button
-                        onClick={() => handleOpenConfirmModal(order)}
-                        className="card-button confirm-button"
-                      >
-                        ✓ Confirm
-                      </button>
                       <button
                         onClick={() => handleEdit(order.id)}
                         className="card-button edit-button"
@@ -615,7 +731,7 @@ const OrderList = () => {
                     <span className="detail-label">Expected Delivery:</span>
                     <span className="detail-value">
                       {new Date(
-                        selectedOrder.expected_date
+                        selectedOrder.expected_date,
                       ).toLocaleDateString()}
                     </span>
                   </div>
@@ -641,7 +757,38 @@ const OrderList = () => {
                 <div className="detail-section full-width">
                   <h4 className="section-title">Measurements</h4>
                   <div className="measurements-box">
-                    {selectedOrder.measurements}
+                    {role === "admin" ? (
+                      adminMeasLoading ? (
+                        <span className="loading-text">
+                          Loading measurements...
+                        </span>
+                      ) : adminMeasurements &&
+                        Object.keys(adminMeasurements).length > 0 ? (
+                        <div className="measurements-grid">
+                          {Object.keys(adminMeasurements)
+                            .filter(
+                              (key) =>
+                                key !== "username" &&
+                                key !== "id" &&
+                                adminMeasurements[key],
+                            )
+                            .map((key) => (
+                              <div key={key} className="measurement-item">
+                                <span className="measurement-label">
+                                  {key}:
+                                </span>
+                                <span className="measurement-value">
+                                  {adminMeasurements[key]}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      ) : (
+                        <span>No measurements found for this client.</span>
+                      )
+                    ) : (
+                      selectedOrder.measurements
+                    )}
                   </div>
                 </div>
 
@@ -655,36 +802,20 @@ const OrderList = () => {
             </div>
 
             <div className="modal-footer">
-              {!selectedOrder.is_confirmed && (
-                <>
-                  <button
-                    onClick={() => {
-                      setShowDetailsModal(false);
-                      handleOpenConfirmModal(selectedOrder);
-                    }}
-                    className="button button-primary"
-                    style={{
-                      background: COLORS.BUTTON_ACTIVE,
-                      color: COLORS.TEXT_WHITE,
-                    }}
-                  >
-                    ✓ Confirm Order
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowDetailsModal(false);
-                      handleEdit(selectedOrder.id);
-                    }}
-                    className="button"
-                    style={{
-                      background: "rgba(139, 69, 19, 0.1)",
-                      color: COLORS.PRIMARY_BROWN_1,
-                      border: `1px solid ${COLORS.PRIMARY_BROWN_1}`,
-                    }}
-                  >
-                    ✏️ Edit Order
-                  </button>
-                </>
+              {role === "admin" && !selectedOrder.is_confirmed && (
+                <button
+                  onClick={() => {
+                    setShowDetailsModal(false);
+                    handleOpenConfirmModal(selectedOrder);
+                  }}
+                  className="button button-primary"
+                  style={{
+                    background: COLORS.BUTTON_ACTIVE,
+                    color: COLORS.TEXT_WHITE,
+                  }}
+                >
+                  ✓ Confirm Order
+                </button>
               )}
               <button
                 onClick={() => setShowDetailsModal(false)}

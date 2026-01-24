@@ -47,12 +47,15 @@ const CreateMeasurement = () => {
 
   const checkExistingMeasurements = async () => {
     try {
+      console.log("Checking for existing measurements for username:", username);
       const response = await axios.get(
         `${backendUrl}/api/users/measurements/view/`,
         {
           params: { username },
-        }
+        },
       );
+      console.log("Existing measurements response:", response.data);
+
       if (response.data && Object.keys(response.data).length > 0) {
         setExistingMeasurements(response.data);
         // Pre-fill form with existing data
@@ -64,15 +67,18 @@ const CreateMeasurement = () => {
               value !== null && value !== undefined ? value.toString() : "";
           }
         });
+        console.log("Filled data from existing measurements:", filledData);
         setUserData((prev) => ({
           ...prev,
           ...filledData,
           username: username,
         }));
+      } else {
+        console.log("No existing measurements found - response data is empty");
       }
     } catch (error) {
       // No existing measurements is fine
-      console.log("No existing measurements found");
+      console.log("No existing measurements found - API error:", error.message);
     }
   };
 
@@ -116,6 +122,12 @@ const CreateMeasurement = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    // Show confirmation dialog before saving
+    const confirmed = window.confirm(
+      "Please confirm your details again, click okay if very sure",
+    );
+    if (!confirmed) return;
+
     setIsSubmitting(true);
     try {
       // Prepare measurement data
@@ -156,7 +168,7 @@ const CreateMeasurement = () => {
       // Always use POST to the original endpoint
       const response = await axios.post(
         `${backendUrl}/api/users/measurements/new/`,
-        measurementData
+        measurementData,
       );
 
       console.log("API Response:", response.data);
@@ -287,7 +299,7 @@ const CreateMeasurement = () => {
       key !== "username" &&
       userData[key] !== "" &&
       userData[key] !== null &&
-      userData[key] !== undefined
+      userData[key] !== undefined,
   ).length;
   const totalFields = 14; // Excluding username
 
@@ -374,8 +386,8 @@ const CreateMeasurement = () => {
             <div className="notice-content">
               <h4>Existing Measurements Found</h4>
               <p>
-                Your existing measurements have been pre-filled. You can update
-                them as needed.
+                Your measurements are now readonly. To make changes, please use
+                the View/Update Measurements page.
               </p>
             </div>
           </div>
@@ -413,9 +425,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter neck measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -442,9 +454,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter chest measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -471,9 +483,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter shoulder width"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
             </div>
@@ -509,9 +521,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter waist measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -535,9 +547,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter hip measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -556,9 +568,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter body length"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
             </div>
@@ -586,9 +598,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter sleeve length"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -607,9 +619,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter armhole"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -628,9 +640,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter bicep measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -649,9 +661,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter wrist measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
             </div>
@@ -679,9 +691,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter inseam"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -700,9 +712,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter outseam"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -721,9 +733,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter thigh measurement"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
 
@@ -742,9 +754,9 @@ const CreateMeasurement = () => {
                     placeholder="Enter rise"
                     step="0.1"
                     min="0"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!existingMeasurements}
                   />
-                  <span className="unit-label">cm</span>
+                  <span className="unit-label">in</span>
                 </div>
               </div>
             </div>
@@ -760,12 +772,12 @@ const CreateMeasurement = () => {
                 background: COLORS.SECONDARY_RED,
                 color: COLORS.TEXT_WHITE,
               }}
-              disabled={isSubmitting}
+              disabled={isSubmitting || existingMeasurements}
             >
               Clear All
             </button>
 
-            <div className="action-group">
+            {!existingMeasurements && (
               <button
                 type="button"
                 onClick={togglePreview}
@@ -779,26 +791,7 @@ const CreateMeasurement = () => {
               >
                 {showPreview ? "Hide Preview" : "Show Preview"}
               </button>
-
-              <button
-                type="submit"
-                className="button button-primary submit-button"
-                style={{
-                  background: COLORS.BUTTON_ACTIVE,
-                  color: COLORS.TEXT_WHITE,
-                }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="loading-spinner-small"></span>
-                    Saving...
-                  </>
-                ) : (
-                  "Save Measurements"
-                )}
-              </button>
-            </div>
+            )}
           </div>
         </form>
       </div>
@@ -822,7 +815,7 @@ const CreateMeasurement = () => {
                       key !== "username" &&
                       userData[key] !== "" &&
                       userData[key] !== null &&
-                      userData[key] !== undefined
+                      userData[key] !== undefined,
                   )
                   .map((key) => (
                     <div key={key} className="preview-item">
@@ -831,7 +824,7 @@ const CreateMeasurement = () => {
                           key.slice(1).replace(/([A-Z])/g, " $1")}
                         :
                       </span>
-                      <span className="preview-value">{userData[key]} cm</span>
+                      <span className="preview-value">{userData[key]} in</span>
                     </div>
                   ))}
               </div>
@@ -853,11 +846,10 @@ const CreateMeasurement = () => {
                   color: COLORS.TEXT_WHITE,
                 }}
               >
-                Close Preview
+                Keep Editing
               </button>
               <button
                 onClick={() => {
-                  closeModal();
                   handleSubmit({ preventDefault: () => {} });
                 }}
                 className="button button-primary"
@@ -867,7 +859,7 @@ const CreateMeasurement = () => {
                 }}
                 disabled={isSubmitting || filledCount < 5}
               >
-                Save Measurements
+                Save Measurement
               </button>
             </div>
           </div>

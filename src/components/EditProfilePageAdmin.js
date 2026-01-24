@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../globalContext/constant";
 import { useNavigate, useParams } from "react-router-dom";
-import background from "../images/editprofile.webp"; // Adjust path accordingly
+import background from "../images/editprofile.webp";
+import {
+  COLORS,
+  SELECTED_FONT,
+  TYPOGRAPHY,
+  SPACING,
+  BORDER_RADIUS,
+  SHADOWS,
+} from "../utils/constants";
 
 const EditProfilePage = () => {
   const [profile, setProfile] = useState({
@@ -21,7 +29,7 @@ const EditProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          `${backendUrl}/api/users/profile/${ProfileId}`
+          `${backendUrl}/api/users/profile/${ProfileId}`,
         );
         setProfile(response.data);
       } catch (err) {
@@ -92,8 +100,8 @@ const EditProfilePage = () => {
             type="email"
             name="email"
             value={profile.email}
-            onChange={handleChange}
-            style={styles.input}
+            readOnly
+            style={styles.inputReadonly}
           />
           <label style={styles.label}>Bio:</label>
           <textarea
@@ -141,117 +149,149 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "40px", // Increased padding for a more spacious feel
+    padding: SPACING.XL,
+    fontFamily: SELECTED_FONT,
   },
   container: {
-    maxWidth: "600px", // Increased width for a more spacious layout
+    maxWidth: "700px",
     width: "100%",
     margin: "50px auto",
-    padding: "50px", // Added padding inside the container
-    backgroundColor: "rgba(255, 255, 255, 0.85)", // Slightly more transparent for better background visibility
-    borderRadius: "15px", // Increased border-radius for a softer look
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)", // Stronger shadow for depth
-    fontFamily: "Arial, sans-serif",
+    padding: SPACING.XXL,
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: BORDER_RADIUS.LG,
+    boxShadow: SHADOWS.LARGE,
   },
   heading: {
-    fontSize: "2.5rem", // Larger font size for more emphasis
-    marginBottom: "30px",
+    fontSize: TYPOGRAPHY.HEADING_1,
+    fontWeight: TYPOGRAPHY.WEIGHT_BOLD,
+    marginBottom: SPACING.XL,
     textAlign: "center",
-    color: "#333",
+    color: COLORS.PRIMARY_BROWN_1,
+    fontFamily: SELECTED_FONT,
   },
   form: {
     display: "flex",
     flexDirection: "column",
   },
   label: {
-    marginBottom: "10px", // Increased space between labels and inputs
-    fontSize: "1.2rem", // Slightly larger font for labels
-    color: "#555",
-    textAlign: "left",
+    marginBottom: SPACING.SM,
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    color: COLORS.PRIMARY_BROWN_1,
+    fontFamily: SELECTED_FONT,
   },
   input: {
-    padding: "15px", // Increased padding for inputs to make them feel more open
-    fontSize: "1.2rem", // Larger font size for better readability
-    marginBottom: "30px", // Increased space between inputs
-    borderRadius: "8px", // Softer edges for a more modern look
-    border: "1px solid #ccc",
+    padding: SPACING.MD,
+    fontSize: TYPOGRAPHY.BODY,
+    marginBottom: SPACING.LG,
+    borderRadius: BORDER_RADIUS.MD,
+    border: `1px solid ${COLORS.BORDER}`,
+    fontFamily: SELECTED_FONT,
+    transition: "border-color 0.3s ease",
+  },
+  inputReadonly: {
+    padding: SPACING.MD,
+    fontSize: TYPOGRAPHY.BODY,
+    marginBottom: SPACING.LG,
+    borderRadius: BORDER_RADIUS.MD,
+    border: `1px solid ${COLORS.BORDER}`,
+    fontFamily: SELECTED_FONT,
+    backgroundColor: "#f5f5f5",
+    color: "#666",
+    cursor: "not-allowed",
   },
   textarea: {
-    padding: "15px",
-    fontSize: "1.2rem",
-    marginBottom: "30px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
+    padding: SPACING.MD,
+    fontSize: TYPOGRAPHY.BODY,
+    marginBottom: SPACING.LG,
+    borderRadius: BORDER_RADIUS.MD,
+    border: `1px solid ${COLORS.BORDER}`,
     resize: "vertical",
-    height: "150px", // Increased height to make it more comfortable for longer text
+    height: "120px",
+    fontFamily: SELECTED_FONT,
+    transition: "border-color 0.3s ease",
   },
   button: {
-    padding: "15px 20px",
-    fontSize: "1.2rem",
-    color: "#fff",
-    backgroundColor: "#007bff",
+    padding: `${SPACING.MD} ${SPACING.LG}`,
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    color: COLORS.TEXT_WHITE,
+    backgroundColor: COLORS.PRIMARY_BROWN_1,
     border: "none",
-    borderRadius: "8px", // Softer edges for buttons
+    borderRadius: BORDER_RADIUS.MD,
     cursor: "pointer",
-    transition: "background-color 0.3s",
-    marginBottom: "20px", // Added margin for more space between buttons
+    transition: "all 0.3s ease",
+    marginBottom: SPACING.MD,
+    fontFamily: SELECTED_FONT,
+    boxShadow: SHADOWS.MEDIUM,
   },
   homeButton: {
-    padding: "15px 20px",
-    fontSize: "1.2rem",
-    color: "#fff",
-    backgroundColor: "#28a745",
+    padding: `${SPACING.MD} ${SPACING.LG}`,
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    color: COLORS.TEXT_WHITE,
+    backgroundColor: COLORS.SECONDARY_RED,
     border: "none",
-    borderRadius: "8px",
+    borderRadius: BORDER_RADIUS.MD,
     cursor: "pointer",
+    fontFamily: SELECTED_FONT,
+    boxShadow: SHADOWS.MEDIUM,
   },
   error: {
-    color: "red",
-    fontSize: "1.2rem",
-    marginBottom: "20px",
+    color: COLORS.SECONDARY_RED,
+    fontSize: TYPOGRAPHY.BODY,
+    marginBottom: SPACING.LG,
     textAlign: "center",
+    padding: SPACING.MD,
+    backgroundColor: "rgba(220, 53, 69, 0.1)",
+    borderRadius: BORDER_RADIUS.MD,
+    fontFamily: SELECTED_FONT,
   },
-
-  // Modal styles
   modalOverlay: {
     position: "fixed",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,
   },
   modalContent: {
-    backgroundColor: "#fff",
-    padding: "30px",
-    borderRadius: "10px",
+    backgroundColor: COLORS.TEXT_WHITE,
+    padding: SPACING.XXL,
+    borderRadius: BORDER_RADIUS.LG,
     textAlign: "center",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    width: "80%",
-    maxWidth: "400px",
+    boxShadow: SHADOWS.LARGE,
+    width: "90%",
+    maxWidth: "450px",
   },
   modalHeading: {
-    fontSize: "1.5rem",
-    color: "#333",
-    marginBottom: "10px",
+    fontSize: TYPOGRAPHY.HEADING_2,
+    fontWeight: TYPOGRAPHY.WEIGHT_BOLD,
+    color: COLORS.PRIMARY_BROWN_1,
+    marginBottom: SPACING.MD,
+    fontFamily: SELECTED_FONT,
   },
   modalText: {
-    fontSize: "1rem",
-    color: "#333",
-    marginBottom: "20px",
+    fontSize: TYPOGRAPHY.BODY,
+    color: COLORS.TEXT_DARK,
+    marginBottom: SPACING.LG,
+    fontFamily: SELECTED_FONT,
   },
   closeButton: {
-    padding: "10px 20px",
-    fontSize: "1rem",
-    color: "#fff",
-    backgroundColor: "#007bff",
+    padding: `${SPACING.SM} ${SPACING.XL}`,
+    fontSize: TYPOGRAPHY.BODY,
+    fontWeight: TYPOGRAPHY.WEIGHT_SEMIBOLD,
+    color: COLORS.TEXT_WHITE,
+    backgroundColor: COLORS.PRIMARY_BROWN_1,
     border: "none",
-    borderRadius: "5px",
+    borderRadius: BORDER_RADIUS.MD,
     cursor: "pointer",
+    fontFamily: SELECTED_FONT,
+    boxShadow: SHADOWS.MEDIUM,
   },
 };
 

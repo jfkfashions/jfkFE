@@ -251,6 +251,24 @@
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+.status-badge.in-progress {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status-badge.fitting {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8B5CF6;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.status-badge.completed {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22C55E;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
 .order-card-body {
     padding: var(--spacing-lg);
 }
@@ -293,6 +311,9 @@
     padding: var(--spacing-md) var(--spacing-lg);
     border-top: 1px solid #E5E7EB;
     background: rgba(245, 245, 245, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
 }
 
 .view-button {
@@ -360,6 +381,56 @@
 .delete-button:hover {
     background: rgba(239, 68, 68, 0.2);
     transform: translateY(-1px);
+}
+
+.view-button {
+    background: rgba(139, 69, 19, 0.1);
+    color: var(--primary-brown-1);
+    border-color: rgba(139, 69, 19, 0.3);
+}
+
+.view-button:hover {
+    background: rgba(139, 69, 19, 0.2);
+    transform: translateY(-1px);
+}
+
+.progress-button {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.progress-button:hover {
+    background: rgba(59, 130, 246, 0.2);
+    transform: translateY(-1px);
+}
+
+.fitting-button {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8B5CF6;
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.fitting-button:hover {
+    background: rgba(139, 92, 246, 0.2);
+    transform: translateY(-1px);
+}
+
+.completed-button {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22C55E;
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.completed-button:hover {
+    background: rgba(34, 197, 94, 0.2);
+    transform: translateY(-1px);
+}
+
+.card-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 /* No Orders State */
@@ -610,6 +681,40 @@
     font-size: var(--body);
     line-height: 1.6;
     white-space: pre-wrap;
+}
+
+/* Admin Measurements Grid */
+.measurements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.measurement-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-sm);
+    background: rgba(139, 69, 19, 0.03);
+}
+
+.measurement-label {
+    font-weight: 600;
+    color: var(--text-gray);
+    text-transform: capitalize;
+    margin-right: var(--spacing-sm);
+}
+
+.measurement-value {
+    font-weight: 600;
+    color: var(--text-black);
+}
+
+.measurements-grid .measurement-item:hover {
+    border-color: var(--primary-brown-1);
+    background: rgba(139, 69, 19, 0.06);
 }
 
 .modal-footer {

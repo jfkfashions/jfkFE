@@ -146,6 +146,58 @@
     margin-top: var(--spacing-xxl);
 }
 
+/* Search Container */
+.search-container {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-right: 40px;
+    font-size: var(--body);
+    color: var(--text-black);
+    background: white;
+    border: 2px solid rgba(139, 69, 19, 0.2);
+    border-radius: var(--radius-lg);
+    outline: none;
+    transition: all var(--transition-default);
+    font-family: inherit;
+}
+
+.search-input:focus {
+    border-color: var(--primary-brown-1);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--text-gray);
+}
+
+.clear-search-button {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-gray);
+    font-size: var(--heading-3);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
+}
+
+.clear-search-button:hover {
+    color: var(--secondary-red);
+    background: rgba(220, 38, 38, 0.1);
+}
+
 .table-container {
     overflow-x: auto;
     border-radius: var(--radius-lg);
@@ -171,6 +223,37 @@
     font-size: var(--body);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.status-header {
+    position: relative;
+}
+
+.status-header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.status-filter-dropdown {
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-sm);
+    color: var(--text-white);
+    font-size: var(--body-small);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.status-filter-dropdown:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.status-filter-dropdown option {
+    background: var(--primary-brown-1);
+    color: var(--text-white);
 }
 
 .table-row {
@@ -199,6 +282,7 @@
 
 .client-name {
     font-weight: 500;
+    color: var(--primary-brown-1);
 }
 
 .event-type {

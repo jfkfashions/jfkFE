@@ -13,6 +13,8 @@ const EditProfilePage = () => {
     lastname: "",
     phonenumber: "",
     email: "",
+    gender: "",
+    birthdate: "",
     bio: "",
   });
   const [error, setError] = useState(null);
@@ -32,7 +34,7 @@ const EditProfilePage = () => {
           return;
         }
         const response = await axios.get(
-          `${backendUrl}/api/users/profile/${username}`
+          `${backendUrl}/api/users/profile/${username}`,
         );
         // Ensure bio is never null, convert to empty string if needed
         const userData = response.data;
@@ -41,6 +43,8 @@ const EditProfilePage = () => {
           lastname: userData.lastname || "",
           phonenumber: userData.phonenumber || "",
           email: userData.email || "",
+          gender: userData.gender || "",
+          birthdate: userData.birthdate || "",
           bio: userData.bio || "", // Convert null to empty string
         });
       } catch (err) {
@@ -123,7 +127,7 @@ const EditProfilePage = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Unable to update profile. Please try again."
+          "Unable to update profile. Please try again.",
       );
       console.error("Update error:", err);
     } finally {
@@ -139,7 +143,7 @@ const EditProfilePage = () => {
   const handleCancel = () => {
     if (
       window.confirm(
-        "Are you sure you want to cancel? Any unsaved changes will be lost."
+        "Are you sure you want to cancel? Any unsaved changes will be lost.",
       )
     ) {
       navigate("/client-home");
@@ -326,17 +330,67 @@ const EditProfilePage = () => {
                   type="email"
                   name="email"
                   value={profile.email || ""}
-                  onChange={handleChange}
                   className={`form-input ${
                     validationErrors.email ? "input-error" : ""
                   }`}
                   placeholder="Enter your email address"
                   required
-                  disabled={isSaving}
+                  disabled={true}
+                  title="Email address cannot be changed after sign-up"
                 />
                 {validationErrors.email && (
                   <span className="field-error">{validationErrors.email}</span>
                 )}
+                <span className="field-hint">
+                  Cannot be changed after sign-up
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Information Section - Read Only */}
+          <div className="form-section">
+            <h2 className="section-title">
+              <span className="section-icon">ℹ️</span>
+              Additional Information
+            </h2>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="gender" className="form-label">
+                  Gender
+                </label>
+                <input
+                  id="gender"
+                  type="text"
+                  name="gender"
+                  value={profile.gender || ""}
+                  className="form-input"
+                  placeholder="Not provided"
+                  disabled={true}
+                  title="Gender cannot be changed after sign-up"
+                />
+                <span className="field-hint">
+                  Cannot be changed after sign-up
+                </span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="birthdate" className="form-label">
+                  Date of Birth
+                </label>
+                <input
+                  id="birthdate"
+                  type="text"
+                  name="birthdate"
+                  value={profile.birthdate || ""}
+                  className="form-input"
+                  placeholder="Not provided"
+                  disabled={true}
+                  title="Date of birth cannot be changed after sign-up"
+                />
+                <span className="field-hint">
+                  Cannot be changed after sign-up
+                </span>
               </div>
             </div>
           </div>

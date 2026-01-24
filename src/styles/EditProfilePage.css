@@ -205,6 +205,14 @@
     color: var(--secondary-red);
 }
 
+.field-hint {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: var(--body-small);
+    color: var(--text-gray);
+    font-style: italic;
+}
+
 /* Textarea Styles */
 .form-textarea {
     width: 100%;

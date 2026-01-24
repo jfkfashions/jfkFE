@@ -44,7 +44,7 @@ const MeasurementUpdatePage = () => {
     try {
       const response = await axios.get(
         `${backendUrl}/api/users/measurements/view/`,
-        { params: { username } }
+        { params: { username } },
       );
 
       let measurements;
@@ -54,10 +54,10 @@ const MeasurementUpdatePage = () => {
         measurements = response.data;
       }
 
-      // Convert API inches to cm for display/editing
-      const cmData = convertInchesToCm(measurements);
-      setUserData(cmData);
-      setOriginalData(cmData);
+      // Data is already in inches from API - no conversion needed
+      const inchesData = convertInchesToInches(measurements);
+      setUserData(inchesData);
+      setOriginalData(inchesData);
     } catch (error) {
       console.error("Error fetching measurements:", error);
       setError("Unable to fetch measurements.");
@@ -66,27 +66,15 @@ const MeasurementUpdatePage = () => {
     }
   };
 
-  // Convert inches to cm for display
-  const convertInchesToCm = (data) => {
+  // No conversion needed - measurements are already stored in inches
+  const convertInchesToInches = (data) => {
     if (!data) return {};
-    const converted = { ...data };
-    Object.keys(converted).forEach((key) => {
-      if (key !== "username" && key !== "id" && converted[key]) {
-        converted[key] = (parseFloat(converted[key]) * 2.54).toFixed(1);
-      }
-    });
-    return converted;
+    return { ...data };
   };
 
-  // Convert cm back to inches for API submission
-  const convertCmToInches = (data) => {
-    const converted = { ...data };
-    Object.keys(converted).forEach((key) => {
-      if (key !== "username" && key !== "id" && converted[key]) {
-        converted[key] = (parseFloat(converted[key]) / 2.54).toFixed(2);
-      }
-    });
-    return converted;
+  // No conversion needed - submit directly in inches
+  const convertInchesToApi = (data) => {
+    return { ...data };
   };
 
   const validateForm = () => {
@@ -116,8 +104,8 @@ const MeasurementUpdatePage = () => {
 
     try {
       setIsSubmitting(true);
-      // Convert cm back to inches for API
-      const dataForApi = convertCmToInches(userData);
+      // Data is already in inches - submit directly without conversion
+      const dataForApi = convertInchesToApi(userData);
 
       await axios.put(`${backendUrl}/api/users/measurements/update/`, {
         ...dataForApi,
@@ -173,37 +161,37 @@ const MeasurementUpdatePage = () => {
         {
           label: "Neck",
           name: "neck",
-          placeholder: "Enter neck measurement in cm",
+          placeholder: "Enter neck measurement in inches",
         },
         {
           label: "Chest",
           name: "chest",
-          placeholder: "Enter chest measurement in cm",
+          placeholder: "Enter chest measurement in inches",
         },
         {
           label: "Shoulder",
           name: "shoulder",
-          placeholder: "Enter shoulder width in cm",
+          placeholder: "Enter shoulder width in in",
         },
         {
           label: "Sleeve",
           name: "sleeve",
-          placeholder: "Enter sleeve length in cm",
+          placeholder: "Enter sleeve length in in",
         },
         {
           label: "Armhole",
           name: "armhole",
-          placeholder: "Enter armhole measurement in cm",
+          placeholder: "Enter armhole measurement in inches",
         },
         {
           label: "Bicep",
           name: "bicep",
-          placeholder: "Enter bicep measurement in cm",
+          placeholder: "Enter bicep measurement in inches",
         },
         {
           label: "Wrist",
           name: "wrist",
-          placeholder: "Enter wrist measurement in cm",
+          placeholder: "Enter wrist measurement in inches",
         },
       ],
     },
@@ -214,32 +202,32 @@ const MeasurementUpdatePage = () => {
         {
           label: "Waist",
           name: "waist",
-          placeholder: "Enter waist measurement in cm",
+          placeholder: "Enter waist measurement in inches",
         },
         {
           label: "Hip",
           name: "hip",
-          placeholder: "Enter hip measurement in cm",
+          placeholder: "Enter hip measurement in inches",
         },
         {
           label: "Thigh",
           name: "thigh",
-          placeholder: "Enter thigh measurement in cm",
+          placeholder: "Enter thigh measurement in inches",
         },
         {
           label: "Inseam",
           name: "inseam",
-          placeholder: "Enter inseam length in cm",
+          placeholder: "Enter inseam length in in",
         },
         {
           label: "Outseam",
           name: "outseam",
-          placeholder: "Enter outseam length in cm",
+          placeholder: "Enter outseam length in in",
         },
         {
           label: "Rise",
           name: "rise",
-          placeholder: "Enter rise measurement in cm",
+          placeholder: "Enter rise measurement in inches",
         },
       ],
     },
@@ -250,7 +238,7 @@ const MeasurementUpdatePage = () => {
         {
           label: "Body Length",
           name: "bodylength",
-          placeholder: "Enter body length in cm",
+          placeholder: "Enter body length in in",
         },
       ],
     },
@@ -588,7 +576,7 @@ const MeasurementUpdatePage = () => {
           </p>
           <div style={styles.usernameBadge}>Client: {username}</div>
           <p style={styles.unitNotice}>
-            All measurements are in centimeters (cm)
+            All measurements are in inches (in)
           </p>
         </div>
 
@@ -646,7 +634,7 @@ const MeasurementUpdatePage = () => {
                     placeholder={field.placeholder}
                     required
                   />
-                  <span style={styles.inputUnit}>cm</span>
+                  <span style={styles.inputUnit}>in</span>
                 </div>
               </div>
             ))}
@@ -708,8 +696,8 @@ const MeasurementUpdatePage = () => {
                 <thead>
                   <tr>
                     <th style={styles.tableHeader}>Measurement</th>
-                    <th style={styles.tableHeader}>Current (cm)</th>
-                    <th style={styles.tableHeader}>Updated (cm)</th>
+                    <th style={styles.tableHeader}>Current (in)</th>
+                    <th style={styles.tableHeader}>Updated (in)</th>
                   </tr>
                 </thead>
                 <tbody>

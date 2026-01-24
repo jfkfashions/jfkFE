@@ -53,7 +53,7 @@ const OrderForm = () => {
         `${backendUrl}/api/users/measurements/view/`,
         {
           params: { username },
-        }
+        },
       );
       setUserStats(response.data);
     } catch (error) {
@@ -88,6 +88,12 @@ const OrderForm = () => {
 
   const validateForm = () => {
     const errors = {};
+
+    // Check if user has measurements recorded
+    if (Object.keys(userStats).length === 0) {
+      errors.measurements =
+        "Client must have measurements recorded before placing an order. Please create measurements first.";
+    }
 
     if (!measurements.trim()) {
       errors.measurements = "Measurements are required";
@@ -131,7 +137,7 @@ const OrderForm = () => {
 
       const orderresponse = await axios.post(
         `${backendUrl}/api/users/orders/new/`,
-        orderData
+        orderData,
       );
 
       maildata.message = `
@@ -167,13 +173,14 @@ const OrderForm = () => {
                         <div class="detail-item">
                             <span class="detail-label">Order Number:</span>
                             <span class="detail-value">${
+                              orderresponse.data.order_id ||
                               orderresponse.data.id
                             }</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Expected Delivery:</span>
                             <span class="detail-value">${new Date(
-                              expectedDate
+                              expectedDate,
                             ).toLocaleDateString("en-US", {
                               weekday: "long",
                               year: "numeric",
@@ -205,7 +212,7 @@ const OrderForm = () => {
                           .split("\n")
                           .map(
                             (line) =>
-                              `<div style="padding-left: 20px; margin: 5px 0;">• ${line}</div>`
+                              `<div style="padding-left: 20px; margin: 5px 0;">• ${line}</div>`,
                           )
                           .join("")}
                     </p>
@@ -230,7 +237,7 @@ const OrderForm = () => {
         </body>
         </html>
       `;
-      maildata.subject = `🎉 Your Order #${orderresponse.data.id} with JFK Tailor Shop`;
+      maildata.subject = `🎉 Your Order #${orderresponse.data.order_id || orderresponse.data.id} with JFK Tailor Shop`;
       maildata.username = orderresponse.data.client;
 
       setMaildata(maildata);
@@ -243,7 +250,7 @@ const OrderForm = () => {
       console.error("Error placing order:", error);
       setError(
         error.response?.data?.message ||
-          "Failed to place order. Please try again."
+          "Failed to place order. Please try again.",
       );
     } finally {
       setSubmitting(false);
@@ -383,6 +390,32 @@ const OrderForm = () => {
             <span className="section-icon">📏</span>
             Current Measurements
           </h3>
+
+          {/* Display Username above the table */}
+          {Object.keys(userStats).length > 0 && (
+            <div
+              className="client-info"
+              style={{
+                background: "rgba(139, 69, 19, 0.05)",
+                padding: "15px 20px",
+                borderRadius: "8px",
+                marginBottom: "20px",
+                display: "flex",
+                gap: "30px",
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ flex: "1", minWidth: "200px" }}>
+                <strong style={{ color: COLORS.PRIMARY_BROWN_1 }}>
+                  Username:
+                </strong>{" "}
+                <span style={{ fontWeight: "500" }}>
+                  {userStats.username || username}
+                </span>
+              </div>
+            </div>
+          )}
+
           {loading ? (
             <div className="loading-container">
               <div className="loading-spinner-small"></div>
@@ -398,20 +431,24 @@ const OrderForm = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(userStats).map((key) => (
-                    <tr key={key}>
-                      <td className="body-part-cell">
-                        {key
-                          .split("_")
-                          .map(
-                            (word) =>
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                          )
-                          .join(" ")}
-                      </td>
-                      <td className="measurement-cell">{userStats[key]} cm</td>
-                    </tr>
-                  ))}
+                  {Object.keys(userStats)
+                    .filter((key) => key !== "username" && key !== "id")
+                    .map((key) => (
+                      <tr key={key}>
+                        <td className="body-part-cell">
+                          {key
+                            .split("_")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1),
+                            )
+                            .join(" ")}
+                        </td>
+                        <td className="measurement-cell">
+                          {userStats[key]} in
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
               <p className="table-note">
@@ -596,7 +633,7 @@ const OrderForm = () => {
                   />
                   <label htmlFor="material" className="checkbox-label">
                     <span className="checkbox-custom"></span>
-                    Will we provide material?
+                    Yes/No
                   </label>
                 </div>
                 <p className="checkbox-description">
@@ -607,7 +644,8 @@ const OrderForm = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="form-actions">
+          <div className="form-actions" style={{ justifyContent: "center" }}>
+            {/* Reset button - commented out for future implementation
             <button
               type="button"
               onClick={resetForm}
@@ -620,6 +658,7 @@ const OrderForm = () => {
             >
               Reset Form
             </button>
+            */}
             <button
               type="submit"
               className="button button-primary submit-button"
@@ -627,7 +666,14 @@ const OrderForm = () => {
                 background: COLORS.BUTTON_ACTIVE,
                 color: COLORS.TEXT_WHITE,
               }}
-              disabled={loading || submitting}
+              disabled={
+                loading || submitting || Object.keys(userStats).length === 0
+              }
+              title={
+                Object.keys(userStats).length === 0
+                  ? "Client must create measurements first"
+                  : ""
+              }
             >
               {submitting ? (
                 <>

@@ -45,13 +45,13 @@ const AdminUserProfileList = () => {
   const handleDelete = async (username, firstname, lastname) => {
     if (
       window.confirm(
-        `Are you sure you want to delete the profile of ${firstname} ${lastname}?`
+        `Are you sure you want to delete the profile of ${firstname} ${lastname}?`,
       )
     ) {
       try {
         await axios.delete(`${backendUrl}/api/users/profile/${username}/`);
         setProfiles(
-          profiles.filter((profile) => profile.username !== username)
+          profiles.filter((profile) => profile.username !== username),
         );
       } catch (error) {
         console.error("Error deleting profile:", error);
@@ -83,7 +83,7 @@ const AdminUserProfileList = () => {
       profile.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       profile.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
       profile.lastname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      profile.email.toLowerCase().includes(searchTerm.toLowerCase())
+      profile.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   if (loading) {
@@ -295,9 +295,13 @@ const AdminUserProfileList = () => {
                       </span>
                       <div style={styles.statusDetail}>
                         Member since{" "}
-                        {new Date(
-                          profile.created_at || Date.now()
-                        ).toLocaleDateString()}
+                        {profile.created_at
+                          ? (() => {
+                              const date = new Date(profile.created_at);
+                              date.setHours(date.getHours() + 1);
+                              return date.toUTCString().replace("GMT", "GMT+1");
+                            })()
+                          : "—"}
                       </div>
                     </div>
                   </td>
@@ -326,7 +330,7 @@ const AdminUserProfileList = () => {
                           handleDelete(
                             profile.username,
                             profile.firstname,
-                            profile.lastname
+                            profile.lastname,
                           )
                         }
                         style={styles.deleteButton}
@@ -801,7 +805,7 @@ styleSheet.insertRule(
     to { opacity: 1; transform: translateY(0); }
   }
 `,
-  styleSheet.cssRules.length
+  styleSheet.cssRules.length,
 );
 styleSheet.insertRule(
   `
@@ -810,7 +814,7 @@ styleSheet.insertRule(
     100% { transform: rotate(360deg); }
   }
 `,
-  styleSheet.cssRules.length
+  styleSheet.cssRules.length,
 );
 
 // Add hover effects
@@ -820,7 +824,7 @@ styleSheet.insertRule(
     background: ${COLORS.PRIMARY_BROWN_1}08;
   }
 `,
-  styleSheet.cssRules.length
+  styleSheet.cssRules.length,
 );
 
 export default AdminUserProfileList;

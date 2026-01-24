@@ -8,7 +8,7 @@ import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute
 import UnauthorizedPage from "./components/UnauthorizedPage"; // Optional: For unauthorized users
 import ClientHomePage from "./components/ClientHomePage";
 import EditProfilePage from "./components/EditProfilePage";
-import EditProfileAdmin from "./components/EditProfilePageAdmin"
+import EditProfileAdmin from "./components/EditProfilePageAdmin";
 import OrderForm from "./components/OrderForm";
 import OrderList from "./components/OrderList";
 import OrderEdit from "./components/OrderEdit";
@@ -18,6 +18,8 @@ import MeasurementUpdatePage from "./components/MeasurementUpdatePage";
 import AdminDashboard from "./components/AdminDashboardAndOrders";
 import ClientList from "./components/AdminUserProfileList";
 import ViewProfileAdmin from "./components/AdminProfileView";
+import ForgotPasswordPage from "./components/ForgotPasswordPage";
+import ResetPasswordPage from "./components/ResetPasswordPage";
 
 import "./styles/global.css";
 
@@ -27,6 +29,8 @@ const App = () => (
       <Route path="/" element={<LandingPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       {/* <Route path="/login" element={<div>Biodata submitted successfully!</div>}/> */}
       <Route path="/unauthorized" element={<UnauthorizedPage />} />{" "}
       {/* Optional Unauthorized Route */}
@@ -71,9 +75,18 @@ const App = () => (
       <Route path="/orders" element={<OrderList />} />
       <Route path="/neworders" element={<OrderForm />} />
       <Route path="/orders/edit/:orderId" element={<OrderEdit />} />
-      <Route path="/createmeasurement/:username" element={<CreateMeasurment />} />
-      <Route path="/measurements/update/:username" element={<MeasurementUpdatePage />} />
-      <Route path="/measurements/view/:username" element={<MeasurementViewPage />} />
+      <Route
+        path="/createmeasurement/:username"
+        element={<CreateMeasurment />}
+      />
+      <Route
+        path="/measurements/update/:username"
+        element={<MeasurementUpdatePage />}
+      />
+      <Route
+        path="/measurements/view/:username"
+        element={<MeasurementViewPage />}
+      />
       <Route
         path="/admin/dashboard"
         element={
