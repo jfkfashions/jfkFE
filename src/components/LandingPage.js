@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import image from "../images/jfk2.webp"; // Background image
+import image from "../images/jfk2.png"; // Background image
 import "../styles/global.css";
 import "../styles/LandingPage.css";
 
