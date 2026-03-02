@@ -301,13 +301,13 @@ const SignUpPage = () => {
                 </div>
                 <div class="credential-item">
                     <span class="credential-label">Password:</span>
-                    <span class="credential-value">${userData.password}</span>
+                    <span class="credential-value">********</span>
                 </div>
             </div>
             
             <!-- Security Note -->
             <div class="security-note">
-                <p>🔒 <span class="security-icon">Important:</span> For your security, we recommend changing your password after your first login.</p>
+                <p>🔒 <span class="security-icon">Important:</span> For your security, we recommend not sharing your login credentials with anyone.</p>
             </div>
             
             <!-- Next Steps -->
@@ -391,7 +391,7 @@ const SignUpPage = () => {
       await axios.post(`${backendUrl}/api/users/notifications/email`, maildata);
 
       setSuccessMessage(
-        "Account created successfully! Redirecting to login..."
+        "Account created successfully! Redirecting to login...",
       );
 
       // Wait a moment before redirecting
@@ -402,7 +402,7 @@ const SignUpPage = () => {
       setErrorMessage(
         error.response?.data?.error ||
           error.response?.data?.message ||
-          "An error occurred during sign-up. Please try again."
+          "An error occurred during sign-up. Please try again.",
       );
       console.error("Error during sign-up", error);
     } finally {

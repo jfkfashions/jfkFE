@@ -123,10 +123,10 @@ const CreateMeasurement = () => {
     if (!validateForm()) return;
 
     // Show confirmation dialog before saving
-    const confirmed = window.confirm(
-      "Please confirm your details again, click okay if very sure",
-    );
-    if (!confirmed) return;
+    // const confirmed = window.confirm(
+    //   "Please confirm your details again, click okay if very sure",
+    // );
+    // if (!confirmed) return;
 
     setIsSubmitting(true);
     try {

@@ -141,13 +141,14 @@ const EditProfilePage = () => {
   };
 
   const handleCancel = () => {
-    if (
-      window.confirm(
-        "Are you sure you want to cancel? Any unsaved changes will be lost.",
-      )
-    ) {
-      navigate("/client-home");
-    }
+    // if (
+    //   window.confirm(
+    //     "Are you sure you want to cancel? Any unsaved changes will be lost.",
+    //   )
+    // ) {
+    //   navigate("/client-home");
+    // }
+    navigate("/client-home");
   };
 
   // Get bio length safely

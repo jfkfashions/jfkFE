@@ -575,9 +575,7 @@ const MeasurementUpdatePage = () => {
             Update your tailoring measurements for perfect fit
           </p>
           <div style={styles.usernameBadge}>Client: {username}</div>
-          <p style={styles.unitNotice}>
-            All measurements are in inches (in)
-          </p>
+          <p style={styles.unitNotice}>All measurements are in inches (in)</p>
         </div>
 
         {error && (
@@ -654,19 +652,21 @@ const MeasurementUpdatePage = () => {
             >
               📝 Update Measurements
             </button>
-            <button
-              type="button"
-              style={styles.secondaryButton}
-              onMouseEnter={(e) =>
-                Object.assign(e.target.style, buttonHoverStyle)
-              }
-              onMouseLeave={(e) =>
-                Object.assign(e.target.style, styles.secondaryButton)
-              }
-              onClick={handleReset}
-            >
-              ↩️ Reset to Original
-            </button>
+            {false && (
+              <button
+                type="button"
+                style={styles.secondaryButton}
+                onMouseEnter={(e) =>
+                  Object.assign(e.target.style, buttonHoverStyle)
+                }
+                onMouseLeave={(e) =>
+                  Object.assign(e.target.style, styles.secondaryButton)
+                }
+                onClick={handleReset}
+              >
+                ↩️ Reset to Original
+              </button>
+            )}
             <button
               type="button"
               style={styles.secondaryButton}

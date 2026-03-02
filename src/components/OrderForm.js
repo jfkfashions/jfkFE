@@ -633,12 +633,10 @@ const OrderForm = () => {
                   />
                   <label htmlFor="material" className="checkbox-label">
                     <span className="checkbox-custom"></span>
-                    Yes/No
+                    Tick this if the tailor shop will provide the
+                    fabric/material
                   </label>
                 </div>
-                <p className="checkbox-description">
-                  Check this if the tailor shop will provide the fabric/material
-                </p>
               </div>
             </div>
           </div>
@@ -796,8 +794,9 @@ const OrderForm = () => {
             <div className="success-icon">✓</div>
             <h3 className="success-title">Order Placed Successfully!</h3>
             <p className="success-message">
-              Your order has been created and a confirmation email has been sent
-              to the client.
+              {role === "admin"
+                ? "Your order has been created and a confirmation email has been sent to the client."
+                : "Your order has been created and a confirmation email has been sent to you."}
             </p>
             <div className="success-actions">
               <button
