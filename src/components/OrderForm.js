@@ -8,7 +8,7 @@ import { COLORS, SELECTED_FONT } from "../utils/constants";
 import orderFormBackground from "../images/orderform.webp";
 
 const OrderForm = () => {
-  const [measurements, setMeasurements] = useState("");
+  // measurements will be derived automatically from userStats when placing order
   const [userStats, setUserStats] = useState({});
   const [comments, setComments] = useState("");
   const [success, setSuccess] = useState(false);
@@ -32,6 +32,29 @@ const OrderForm = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+
+  // helper: build measurement string based on the latest userStats
+  const buildMeasurementSnapshot = (stats) => {
+    if (!stats) return "";
+    return Object.keys(stats)
+      .filter(
+        (key) =>
+          key !== "username" &&
+          key !== "id" &&
+          stats[key] !== null &&
+          stats[key] !== undefined &&
+          stats[key] !== "",
+      )
+      .map((key) => {
+        // convert snake_case to Title Case
+        const pretty = key
+          .split("_")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(" ");
+        return `${pretty}: ${stats[key]}`;
+      })
+      .join("\n");
+  };
 
   const fetchProfiles = async () => {
     try {
@@ -91,12 +114,8 @@ const OrderForm = () => {
 
     // Check if user has measurements recorded
     if (Object.keys(userStats).length === 0) {
-      errors.measurements =
+      errors.userStats =
         "Client must have measurements recorded before placing an order. Please create measurements first.";
-    }
-
-    if (!measurements.trim()) {
-      errors.measurements = "Measurements are required";
     }
 
     if (!expectedDate.trim()) {
@@ -125,7 +144,7 @@ const OrderForm = () => {
     setSubmitting(true);
     try {
       const orderData = {
-        measurements,
+        measurements: buildMeasurementSnapshot(userStats),
         comments: comments.trim() || "No additional comments",
         expected_date: expectedDate,
         event_type: eventType,
@@ -208,7 +227,7 @@ const OrderForm = () => {
                     
                     <p style="margin: 20px 0;">
                         <strong>📋 Order Details:</strong><br/>
-                        ${measurements
+                        ${buildMeasurementSnapshot(userStats)
                           .split("\n")
                           .map(
                             (line) =>
@@ -258,7 +277,6 @@ const OrderForm = () => {
   };
 
   const resetForm = () => {
-    setMeasurements("");
     setExpectedDate("");
     setEventType("");
     setMaterial(false);
@@ -477,38 +495,8 @@ const OrderForm = () => {
 
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label" htmlFor="measurements">
-                  Measurements *
-                  {validationErrors.measurements && (
-                    <span className="field-error">
-                      {" "}
-                      {validationErrors.measurements}
-                    </span>
-                  )}
-                </label>
-                <textarea
-                  id="measurements"
-                  value={measurements}
-                  onChange={(e) => {
-                    setMeasurements(e.target.value);
-                    if (validationErrors.measurements) {
-                      setValidationErrors({
-                        ...validationErrors,
-                        measurements: "",
-                      });
-                    }
-                  }}
-                  required
-                  className={`form-textarea ${
-                    validationErrors.measurements ? "input-error" : ""
-                  }`}
-                  placeholder="Enter custom measurements or modifications..."
-                  rows="6"
-                  disabled={loading || submitting}
-                />
-                <div className="character-count">
-                  {measurements.length}/500 characters
-                </div>
+                <label className="form-label">Measurements</label>
+                {/* snapshot shown above; no input required */}
               </div>
             </div>
 

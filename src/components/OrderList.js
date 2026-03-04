@@ -26,9 +26,7 @@ const OrderList = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(0);
-  // Admin-specific measurement view state
-  const [adminMeasurements, setAdminMeasurements] = useState(null);
-  const [adminMeasLoading, setAdminMeasLoading] = useState(false);
+  // (measurements snapshot is stored with each order; no separate admin fetch required)
   const ordersPerPage = 8;
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
@@ -296,21 +294,7 @@ const OrderList = () => {
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
     setShowDetailsModal(true);
-    // If admin, fetch up-to-date measurements for the client
-    if (role === "admin" && order?.client) {
-      setAdminMeasLoading(true);
-      axios
-        .get(`${backendUrl}/api/users/measurements/view/`, {
-          params: { username: order.client },
-        })
-        .then((response) => {
-          setAdminMeasurements(response.data);
-        })
-        .catch((err) => {
-          console.error("Error fetching admin measurements:", err);
-        })
-        .finally(() => setAdminMeasLoading(false));
-    }
+    // nothing extra needed – the order already contains a snapshot of measurements
   };
 
   const handleOpenConfirmModal = (order) => {
@@ -757,38 +741,8 @@ const OrderList = () => {
                 <div className="detail-section full-width">
                   <h4 className="section-title">Measurements</h4>
                   <div className="measurements-box">
-                    {role === "admin" ? (
-                      adminMeasLoading ? (
-                        <span className="loading-text">
-                          Loading measurements...
-                        </span>
-                      ) : adminMeasurements &&
-                        Object.keys(adminMeasurements).length > 0 ? (
-                        <div className="measurements-grid">
-                          {Object.keys(adminMeasurements)
-                            .filter(
-                              (key) =>
-                                key !== "username" &&
-                                key !== "id" &&
-                                adminMeasurements[key],
-                            )
-                            .map((key) => (
-                              <div key={key} className="measurement-item">
-                                <span className="measurement-label">
-                                  {key}:
-                                </span>
-                                <span className="measurement-value">
-                                  {adminMeasurements[key]}
-                                </span>
-                              </div>
-                            ))}
-                        </div>
-                      ) : (
-                        <span>No measurements found for this client.</span>
-                      )
-                    ) : (
-                      selectedOrder.measurements
-                    )}
+                    {selectedOrder.measurements ||
+                      "No measurements recorded for this order."}
                   </div>
                 </div>
 
