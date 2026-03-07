@@ -13,17 +13,17 @@ const CreateMeasurement = () => {
     neck: "",
     chest: "",
     waist: "",
-    tummy: "",
+    hip: "",
     shoulder: "",
     sleeve: "",
-    round_sleeve: "",
-    calf: "",
-    cap_size: "",
-    lowleg: "",
-    agbada_length: "",
+    armhole: "",
+    bicep: "",
+    wrist: "",
+    inseam: "",
+    outseam: "",
     thigh: "",
-    trouser_length: "",
-    top_length: "",
+    rise: "",
+    bodylength: "",
   });
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -84,7 +84,7 @@ const CreateMeasurement = () => {
 
   const validateForm = () => {
     const errors = {};
-    const requiredFields = ["neck", "chest", "waist", "tummy", "shoulder"];
+    const requiredFields = ["neck", "chest", "waist", "hip", "shoulder"];
 
     for (let field of requiredFields) {
       const value = userData[field];
@@ -140,17 +140,17 @@ const CreateMeasurement = () => {
         "neck",
         "chest",
         "waist",
-        "tummy",
+        "hip",
         "shoulder",
         "sleeve",
-        "round_sleeve",
-        "calf",
-        "cap_size",
-        "lowleg",
-        "agbada_length",
+        "armhole",
+        "bicep",
+        "wrist",
+        "inseam",
+        "outseam",
         "thigh",
-        "trouser_length",
-        "top_length",
+        "rise",
+        "bodylength",
       ];
 
       measurementFields.forEach((field) => {
@@ -182,17 +182,17 @@ const CreateMeasurement = () => {
         neck: "",
         chest: "",
         waist: "",
-        tummy: "",
+        hip: "",
         shoulder: "",
         sleeve: "",
-        round_sleeve: "",
-        calf: "",
-        cap_size: "",
-        lowleg: "",
-        agbada_length: "",
+        armhole: "",
+        bicep: "",
+        wrist: "",
+        inseam: "",
+        outseam: "",
         thigh: "",
-        trouser_length: "",
-        top_length: "",
+        rise: "",
+        bodylength: "",
       });
 
       // Refresh existing measurements
@@ -276,17 +276,17 @@ const CreateMeasurement = () => {
         neck: "",
         chest: "",
         waist: "",
-        tummy: "",
+        hip: "",
         shoulder: "",
         sleeve: "",
-        round_sleeve: "",
-        calf: "",
-        cap_size: "",
-        lowleg: "",
-        agbada_length: "",
+        armhole: "",
+        bicep: "",
+        wrist: "",
+        inseam: "",
+        outseam: "",
         thigh: "",
-        trouser_length: "",
-        top_length: "",
+        rise: "",
+        bodylength: "",
       });
       setValidationErrors({});
       setError("");
@@ -528,26 +528,23 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="tummy">
-                  Tummy *
-                  {validationErrors.tummy && (
-                    <span className="field-error">
-                      {" "}
-                      {validationErrors.tummy}
-                    </span>
+                <label className="measurement-label" htmlFor="hip">
+                  Hip *
+                  {validationErrors.hip && (
+                    <span className="field-error"> {validationErrors.hip}</span>
                   )}
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="tummy"
+                    id="hip"
                     type="number"
-                    name="tummy"
-                    value={userData.tummy}
+                    name="hip"
+                    value={userData.hip}
                     onChange={handleChange}
                     className={`measurement-input ${
-                      validationErrors.tummy ? "input-error" : ""
+                      validationErrors.hip ? "input-error" : ""
                     }`}
-                    placeholder="Enter tummy measurement"
+                    placeholder="Enter hip measurement"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -557,18 +554,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="top_length">
-                  Top Length
+                <label className="measurement-label" htmlFor="bodylength">
+                  Body Length
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="top_length"
+                    id="bodylength"
                     type="number"
-                    name="top_length"
-                    value={userData.top_length}
+                    name="bodylength"
+                    value={userData.bodylength}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter top length"
+                    placeholder="Enter body length"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -608,18 +605,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="round_sleeve">
-                  Round Sleeve
+                <label className="measurement-label" htmlFor="armhole">
+                  Armhole
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="round_sleeve"
+                    id="armhole"
                     type="number"
-                    name="round_sleeve"
-                    value={userData.round_sleeve}
+                    name="armhole"
+                    value={userData.armhole}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter round sleeve"
+                    placeholder="Enter armhole"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -629,18 +626,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="calf">
-                  Calf
+                <label className="measurement-label" htmlFor="bicep">
+                  Bicep
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="calf"
+                    id="bicep"
                     type="number"
-                    name="calf"
-                    value={userData.calf}
+                    name="bicep"
+                    value={userData.bicep}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter calf"
+                    placeholder="Enter bicep measurement"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -650,18 +647,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="cap_size">
-                  Cap Size
+                <label className="measurement-label" htmlFor="wrist">
+                  Wrist
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="cap_size"
+                    id="wrist"
                     type="number"
-                    name="cap_size"
-                    value={userData.cap_size}
+                    name="wrist"
+                    value={userData.wrist}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter cap size"
+                    placeholder="Enter wrist measurement"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -680,18 +677,18 @@ const CreateMeasurement = () => {
             </h2>
             <div className="measurement-grid">
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="lowleg">
-                  Lowleg
+                <label className="measurement-label" htmlFor="inseam">
+                  Inseam
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="lowleg"
+                    id="inseam"
                     type="number"
-                    name="lowleg"
-                    value={userData.lowleg}
+                    name="inseam"
+                    value={userData.inseam}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter lowleg"
+                    placeholder="Enter inseam"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -701,18 +698,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="agbada_length">
-                  Agbada Length
+                <label className="measurement-label" htmlFor="outseam">
+                  Outseam
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="agbada_length"
+                    id="outseam"
                     type="number"
-                    name="agbada_length"
-                    value={userData.agbada_length}
+                    name="outseam"
+                    value={userData.outseam}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter agbada length"
+                    placeholder="Enter outseam"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}
@@ -743,18 +740,18 @@ const CreateMeasurement = () => {
               </div>
 
               <div className="measurement-group">
-                <label className="measurement-label" htmlFor="trouser_length">
-                  Trouser Length
+                <label className="measurement-label" htmlFor="rise">
+                  Rise
                 </label>
                 <div className="input-with-unit">
                   <input
-                    id="trouser_length"
+                    id="rise"
                     type="number"
-                    name="trouser_length"
-                    value={userData.trouser_length}
+                    name="rise"
+                    value={userData.rise}
                     onChange={handleChange}
                     className="measurement-input"
-                    placeholder="Enter trouser length"
+                    placeholder="Enter rise"
                     step="0.1"
                     min="0"
                     disabled={isSubmitting || !!existingMeasurements}

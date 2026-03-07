@@ -78,14 +78,10 @@ const MeasurementViewPage = () => {
         { label: "Neck", value: measurements?.neck, unit: "inches" },
         { label: "Chest", value: measurements?.chest, unit: "inches" },
         { label: "Shoulder", value: measurements?.shoulder, unit: "inches" },
-        {
-          label: "Round Sleeve",
-          value: measurements?.round_sleeve,
-          unit: "inches",
-        },
-        { label: "Calf", value: measurements?.calf, unit: "inches" },
+        { label: "Armhole", value: measurements?.armhole, unit: "inches" },
+        { label: "Bicep", value: measurements?.bicep, unit: "inches" },
         { label: "Sleeve", value: measurements?.sleeve, unit: "inches" },
-        { label: "Cap Size", value: measurements?.cap_size, unit: "inches" },
+        { label: "Wrist", value: measurements?.wrist, unit: "inches" },
       ],
     },
     {
@@ -93,19 +89,11 @@ const MeasurementViewPage = () => {
       icon: "👖",
       measurements: [
         { label: "Waist", value: measurements?.waist, unit: "inches" },
-        { label: "Tummy", value: measurements?.tummy, unit: "inches" },
+        { label: "Hip", value: measurements?.hip, unit: "inches" },
         { label: "Thigh", value: measurements?.thigh, unit: "inches" },
-        { label: "Lowleg", value: measurements?.lowleg, unit: "inches" },
-        {
-          label: "Agbada Length",
-          value: measurements?.agbada_length,
-          unit: "inches",
-        },
-        {
-          label: "Trouser Length",
-          value: measurements?.trouser_length,
-          unit: "inches",
-        },
+        { label: "Inseam", value: measurements?.inseam, unit: "inches" },
+        { label: "Outseam", value: measurements?.outseam, unit: "inches" },
+        { label: "Rise", value: measurements?.rise, unit: "inches" },
       ],
     },
     {
@@ -113,8 +101,8 @@ const MeasurementViewPage = () => {
       icon: "👤",
       measurements: [
         {
-          label: "Top Length",
-          value: measurements?.top_length,
+          label: "Body Length",
+          value: measurements?.bodylength,
           unit: "inches",
         },
       ],

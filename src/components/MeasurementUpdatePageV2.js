@@ -12,17 +12,17 @@ const MeasurementUpdatePage = () => {
     neck: "",
     chest: "",
     waist: "",
-    tummy: "",
+    hip: "",
     shoulder: "",
     sleeve: "",
-    round_sleeve: "",
-    calf: "",
-    cap_size: "",
-    lowleg: "",
-    agbada_length: "",
+    armhole: "",
+    bicep: "",
+    wrist: "",
+    inseam: "",
+    outseam: "",
     thigh: "",
-    trouser_length: "",
-    top_length: "",
+    rise: "",
+    bodylength: "",
   });
 
   const [originalData, setOriginalData] = useState(null);
@@ -78,7 +78,7 @@ const MeasurementUpdatePage = () => {
   };
 
   const validateForm = () => {
-    const requiredFields = ["neck", "chest", "waist", "tummy", "shoulder"];
+    const requiredFields = ["neck", "chest", "waist", "hip", "shoulder"];
     for (let field of requiredFields) {
       if (!userData[field] || userData[field] === "") {
         setError(`Please fill in the ${field} field.`);
@@ -179,19 +179,19 @@ const MeasurementUpdatePage = () => {
           placeholder: "Enter sleeve length in in",
         },
         {
-          label: "Round Sleeve",
-          name: "round_sleeve",
-          placeholder: "Enter round sleeve in inches",
+          label: "Armhole",
+          name: "armhole",
+          placeholder: "Enter armhole measurement in inches",
         },
         {
-          label: "Calf",
-          name: "calf",
-          placeholder: "Enter calf in inches",
+          label: "Bicep",
+          name: "bicep",
+          placeholder: "Enter bicep measurement in inches",
         },
         {
-          label: "Cap Size",
-          name: "cap_size",
-          placeholder: "Enter cap size in inches",
+          label: "Wrist",
+          name: "wrist",
+          placeholder: "Enter wrist measurement in inches",
         },
       ],
     },
@@ -205,9 +205,9 @@ const MeasurementUpdatePage = () => {
           placeholder: "Enter waist measurement in inches",
         },
         {
-          label: "Tummy",
-          name: "tummy",
-          placeholder: "Enter tummy measurement in inches",
+          label: "Hip",
+          name: "hip",
+          placeholder: "Enter hip measurement in inches",
         },
         {
           label: "Thigh",
@@ -215,19 +215,19 @@ const MeasurementUpdatePage = () => {
           placeholder: "Enter thigh measurement in inches",
         },
         {
-          label: "Lowleg",
-          name: "lowleg",
-          placeholder: "Enter lowleg in in",
+          label: "Inseam",
+          name: "inseam",
+          placeholder: "Enter inseam length in in",
         },
         {
-          label: "Agbada Length",
-          name: "agbada_length",
-          placeholder: "Enter agbada length in in",
+          label: "Outseam",
+          name: "outseam",
+          placeholder: "Enter outseam length in in",
         },
         {
-          label: "Trouser Length",
-          name: "trouser_length",
-          placeholder: "Enter trouser length in inches",
+          label: "Rise",
+          name: "rise",
+          placeholder: "Enter rise measurement in inches",
         },
       ],
     },
@@ -236,9 +236,9 @@ const MeasurementUpdatePage = () => {
       icon: "👤",
       fields: [
         {
-          label: "Top Length",
-          name: "top_length",
-          placeholder: "Enter top length in in",
+          label: "Body Length",
+          name: "bodylength",
+          placeholder: "Enter body length in in",
         },
       ],
     },
