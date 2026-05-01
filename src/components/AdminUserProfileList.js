@@ -325,19 +325,34 @@ const AdminUserProfileList = () => {
                       >
                         ✏️ Edit
                       </button>
-                      <button
-                        onClick={() =>
-                          handleDelete(
-                            profile.username,
-                            profile.firstname,
-                            profile.lastname,
-                          )
-                        }
-                        style={styles.deleteButton}
-                        title="Delete profile"
-                      >
-                        🗑️ Delete
-                      </button>
+                      // <button
+                      //   onClick={() =>
+                      //     handleDelete(
+                      //       profile.username,
+                      //       profile.firstname,
+                      //       profile.lastname,
+                      //     )
+                      //   }
+                      //   style={styles.deleteButton}
+                      //   title="Delete profile"
+                      // >
+                      //   🗑️ Delete
+                      // </button>
+                      {profile.role !== "admin" && (
+                        <button
+                          onClick={() =>
+                            handleDelete(
+                              profile.username,
+                              profile.firstname,
+                              profile.lastname,
+                            )
+                          }
+                          style={styles.deleteButton}
+                          title="Delete profile"
+                        >
+                          🗑️ Delete
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
